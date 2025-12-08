@@ -20,7 +20,10 @@ import {
 interface MinimapItemProps {
   event: ConversationEvent
   isFocused: boolean
+  isHovered: boolean
   onClick: () => void
+  onMouseEnter: () => void
+  onMouseLeave: () => void
 }
 
 // Type label colors matching the inspiration image
@@ -111,7 +114,7 @@ function getEventPreview(event: ConversationEvent): string {
   return event.content || ''
 }
 
-export function MinimapItem({ event, isFocused, onClick }: MinimapItemProps) {
+export function MinimapItem({ event, isFocused, isHovered, onClick, onMouseEnter, onMouseLeave }: MinimapItemProps) {
   const eventType = getEventType(event)
   const preview = getEventPreview(event)
   const IconComponent = typeIcons[eventType as keyof typeof typeIcons] || typeIcons.default
@@ -122,10 +125,12 @@ export function MinimapItem({ event, isFocused, onClick }: MinimapItemProps) {
       <TooltipTrigger asChild>
         <button
           onClick={onClick}
+          onMouseEnter={onMouseEnter}
+          onMouseLeave={onMouseLeave}
           className={cn(
             'w-full flex items-center gap-1.5 px-2 py-1 text-left transition-colors duration-150',
             'border-l-2 hover:bg-muted/50',
-            isFocused
+            isFocused || isHovered
               ? 'border-l-[var(--terminal-accent)] bg-accent/20'
               : 'border-l-transparent'
           )}

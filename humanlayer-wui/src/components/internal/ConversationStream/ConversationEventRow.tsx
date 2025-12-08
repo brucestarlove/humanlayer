@@ -217,6 +217,7 @@ function ConversationEventRowShell({
   setFocusedEventId,
   setFocusSource,
   isFocused,
+  isHovered,
   isLast,
   isThinking,
   responseEditorIsFocused,
@@ -235,6 +236,7 @@ function ConversationEventRowShell({
   setFocusedEventId: (eventId: number | null) => void
   setFocusSource: (source: 'mouse' | 'keyboard' | null) => void
   isFocused: boolean
+  isHovered?: boolean
   isLast: boolean
   isThinking: boolean
   responseEditorIsFocused: boolean
@@ -253,12 +255,15 @@ function ConversationEventRowShell({
   }
 
   /* Focused state, if the reponseEditor is focused, we use the dimmed color */
+  /* Hovered state from minimap also highlights the row */
   if (isFocused) {
     if (responseEditorIsFocused) {
-      outerContainerClasses.push('border-l-[var(--terminal-accent-dim)] bg-accent/5')
+      outerContainerClasses.push('border-l-[var(--terminal-accent-dim)] bg-accent/10')
     } else {
-      outerContainerClasses.push('border-l-[var(--terminal-accent)] bg-accent/10')
+      outerContainerClasses.push('border-l-[var(--terminal-accent)] bg-accent/20')
     }
+  } else if (isHovered) {
+    outerContainerClasses.push('border-l-[var(--terminal-accent-dim)] bg-accent/15')
   } else {
     outerContainerClasses.push('border-l-transparent')
   }
@@ -330,6 +335,7 @@ export interface ConversationEventRowProps extends React.HTMLAttributes<HTMLDivE
   setFocusSource: (source: 'mouse' | 'keyboard' | null) => void
   shouldIgnoreMouseEvent: () => boolean
   isFocused: boolean
+  isHovered?: boolean
   isLast: boolean
   responseEditorIsFocused: boolean
   isGroupItem?: boolean
@@ -354,6 +360,7 @@ function ConversationEventRowInner({
   setFocusSource,
   shouldIgnoreMouseEvent,
   isFocused,
+  isHovered,
   isLast,
   responseEditorIsFocused,
   fileSnapshot,
@@ -688,6 +695,7 @@ function ConversationEventRowInner({
       setFocusedEventId={setFocusedEventId}
       setFocusSource={setFocusSource}
       isFocused={isFocused}
+      isHovered={isHovered}
       isLast={isLast}
       isThinking={isThinking}
       responseEditorIsFocused={responseEditorIsFocused}

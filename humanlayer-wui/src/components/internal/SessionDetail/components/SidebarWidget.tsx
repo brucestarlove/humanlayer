@@ -8,14 +8,18 @@ interface SidebarWidgetProps {
   events: ConversationEvent[]
   lastTodoEvent: ConversationEvent | undefined
   focusedEventId: number | null
+  hoveredEventId: number | null
   onEventClick: (eventId: number) => void
+  onEventHover: (eventId: number | null) => void
 }
 
 export function SidebarWidget({
   events,
   lastTodoEvent,
   focusedEventId,
+  hoveredEventId,
   onEventClick,
+  onEventHover,
 }: SidebarWidgetProps) {
   const [activeTab, setActiveTab] = useState<'minimap' | 'todos'>('minimap')
 
@@ -38,7 +42,9 @@ export function SidebarWidget({
         <MinimapWidget
           events={events}
           focusedEventId={focusedEventId}
+          hoveredEventId={hoveredEventId}
           onEventClick={onEventClick}
+          onEventHover={onEventHover}
         />
       </TabsContent>
 

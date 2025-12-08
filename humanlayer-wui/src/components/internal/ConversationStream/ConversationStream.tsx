@@ -18,6 +18,7 @@ export function ConversationStream({
   session,
   focusedEventId,
   setFocusedEventId,
+  hoveredEventId,
   onApprove,
   onDeny,
   approvingApprovalId,
@@ -37,6 +38,7 @@ export function ConversationStream({
   session: Session
   focusedEventId: number | null
   setFocusedEventId: (id: number | null) => void
+  hoveredEventId?: number | null
   onApprove?: (approvalId: string) => void
   onDeny?: (approvalId: string, reason: string) => void
   approvingApprovalId?: string | null
@@ -242,6 +244,7 @@ export function ConversationStream({
             setFocusSource={setFocusSource || (() => {})}
             shouldIgnoreMouseEvent={shouldIgnoreMouseEvent || (() => false)}
             isFocused={focusedEventId === event.id}
+            isHovered={hoveredEventId === event.id}
             isLast={index === eventsToRender.length - 1}
             responseEditorIsFocused={responseEditor?.isFocused || false}
             setExpandedToolResult={setExpandedToolResult}

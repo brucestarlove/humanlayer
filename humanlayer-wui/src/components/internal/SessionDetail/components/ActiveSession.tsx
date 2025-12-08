@@ -68,6 +68,8 @@ export function ActiveSession({ session, onClose }: ActiveSessionProps) {
   const [activeTab, setActiveTab] = useState<'conversation' | 'terminal'>('conversation')
   // Track if terminal has been opened to lazy-load it (don't connect until first use)
   const [terminalOpened, setTerminalOpened] = useState(false)
+  // Track hovered event from minimap for cross-highlighting
+  const [minimapHoveredEventId, setMinimapHoveredEventId] = useState<number | null>(null)
 
   const responseEditor = useStore(state => state.responseEditor)
   const isEditingSessionTitle = useStore(state => state.isEditingSessionTitle)
@@ -260,6 +262,11 @@ export function ActiveSession({ session, onClose }: ActiveSessionProps) {
       element.scrollIntoView({ behavior: 'smooth', block: 'center' })
     }
   }, [navigation])
+
+  // Minimap hover handler - highlight event in conversation
+  const handleMinimapEventHover = useCallback((eventId: number | null) => {
+    setMinimapHoveredEventId(eventId)
+  }, [])
 
   // Reset scroll flag when session changes
   useEffect(() => {
@@ -937,6 +944,7 @@ export function ActiveSession({ session, onClose }: ActiveSessionProps) {
                     session={session}
                     focusedEventId={navigation.focusedEventId}
                     setFocusedEventId={navigation.setFocusedEventId}
+                    hoveredEventId={minimapHoveredEventId}
                     onApprove={approvals.handleApprove}
                     onDeny={(approvalId: string, reason: string) =>
                       approvals.handleDeny(approvalId, reason, session.id)
@@ -1031,7 +1039,9 @@ export function ActiveSession({ session, onClose }: ActiveSessionProps) {
                 events={events}
                 lastTodoEvent={lastTodo}
                 focusedEventId={navigation.focusedEventId}
+                hoveredEventId={minimapHoveredEventId}
                 onEventClick={handleMinimapEventClick}
+                onEventHover={handleMinimapEventHover}
               />
             </CardContent>
           </Card>

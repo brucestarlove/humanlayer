@@ -60,6 +60,9 @@
   --terminal-warning: #b58900;
   --terminal-error: #dc322f;
   --terminal-selection: #2aa19899;
+  /* Default tooltip styling follows accent on dark themes */
+  --tooltip-bg: var(--terminal-accent);
+  --tooltip-fg: var(--terminal-bg);
 
   /* Standard colors (30-37, 40-47) - Official Solarized values */
   --terminal-color-0: #073642; /* Black (base02) */
@@ -686,6 +689,9 @@
   --terminal-warning: #eab308; /* Yellow highlight */
   --terminal-error: #ec4899; /* Cosmic pink */
   --terminal-selection: rgba(168, 85, 247, 0.2);
+  /* Dark tooltip surface for readability */
+  --tooltip-bg: rgba(8, 14, 30, 0.94);
+  --tooltip-fg: #e5edff;
 
   /* Terminal ANSI colors - Starscape palette */
   --terminal-color-0: #0b1221; /* Black */
@@ -727,6 +733,9 @@
   --terminal-warning: #eab308; /* Yellow highlight */
   --terminal-error: #ec4899; /* Cosmic pink */
   --terminal-selection: #eae7ff;
+  /* Light tooltip surface for readability */
+  --tooltip-bg: rgba(255, 255, 255, 0.98);
+  --tooltip-fg: #0f172a;
 
   /* Terminal ANSI colors - Starscape palette (light) */
   --terminal-color-0: #e2e8f0; /* Black */

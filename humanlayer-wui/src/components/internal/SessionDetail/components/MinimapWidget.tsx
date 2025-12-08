@@ -5,10 +5,12 @@ import { MinimapItem } from './MinimapItem'
 interface MinimapWidgetProps {
   events: ConversationEvent[]
   focusedEventId: number | null
+  hoveredEventId: number | null
   onEventClick: (eventId: number) => void
+  onEventHover: (eventId: number | null) => void
 }
 
-export function MinimapWidget({ events, focusedEventId, onEventClick }: MinimapWidgetProps) {
+export function MinimapWidget({ events, focusedEventId, hoveredEventId, onEventClick, onEventHover }: MinimapWidgetProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const focusedItemRef = useRef<HTMLDivElement>(null)
   const prevEventCountRef = useRef<number>(0)
@@ -64,7 +66,10 @@ export function MinimapWidget({ events, focusedEventId, onEventClick }: MinimapW
           <MinimapItem
             event={event}
             isFocused={event.id === focusedEventId}
+            isHovered={event.id === hoveredEventId}
             onClick={() => onEventClick(event.id)}
+            onMouseEnter={() => onEventHover(event.id)}
+            onMouseLeave={() => onEventHover(null)}
           />
         </div>
       ))}
