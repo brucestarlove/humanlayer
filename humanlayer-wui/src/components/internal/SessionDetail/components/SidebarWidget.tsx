@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { ConversationEvent } from '@/lib/daemon/types'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
 import { MinimapWidget } from './MinimapWidget'
@@ -11,6 +10,8 @@ interface SidebarWidgetProps {
   hoveredEventId: number | null
   onEventClick: (eventId: number) => void
   onEventHover: (eventId: number | null) => void
+  activeTab: 'minimap' | 'todos'
+  onTabChange: (tab: 'minimap' | 'todos') => void
 }
 
 export function SidebarWidget({
@@ -20,13 +21,13 @@ export function SidebarWidget({
   hoveredEventId,
   onEventClick,
   onEventHover,
+  activeTab,
+  onTabChange,
 }: SidebarWidgetProps) {
-  const [activeTab, setActiveTab] = useState<'minimap' | 'todos'>('minimap')
-
   return (
     <Tabs
       value={activeTab}
-      onValueChange={value => setActiveTab(value as 'minimap' | 'todos')}
+      onValueChange={value => onTabChange(value as 'minimap' | 'todos')}
       className="flex flex-col flex-1 min-h-0"
     >
       <TabsList className="w-full flex-shrink-0">
@@ -38,7 +39,7 @@ export function SidebarWidget({
         </TabsTrigger>
       </TabsList>
 
-      <TabsContent value="minimap" className="flex-1 min-h-0 mt-2 flex flex-col overflow-hidden">
+      <TabsContent value="minimap" className="flex-1 min-h-0 mt-1 flex flex-col overflow-hidden">
         <MinimapWidget
           events={events}
           focusedEventId={focusedEventId}
@@ -48,7 +49,7 @@ export function SidebarWidget({
         />
       </TabsContent>
 
-      <TabsContent value="todos" className="flex-1 min-h-0 mt-2 flex flex-col overflow-hidden">
+      <TabsContent value="todos" className="flex-1 min-h-0 mt-1 flex flex-col overflow-hidden">
         {lastTodoEvent ? (
           <TodoWidget event={lastTodoEvent} />
         ) : (

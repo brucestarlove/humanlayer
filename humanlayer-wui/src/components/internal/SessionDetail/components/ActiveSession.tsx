@@ -66,6 +66,7 @@ export function ActiveSession({ session, onClose }: ActiveSessionProps) {
   const [dangerousSkipPermissionsDialogOpen, setDangerousSkipPermissionsDialogOpen] = useState(false)
   const [directoriesDropdownOpen, setDirectoriesDropdownOpen] = useState(false)
   const [activeTab, setActiveTab] = useState<'conversation' | 'terminal'>('conversation')
+  const [sidebarMode, setSidebarMode] = useState<'minimap' | 'todos' | 'hidden'>('minimap')
   // Track if terminal has been opened to lazy-load it (don't connect until first use)
   const [terminalOpened, setTerminalOpened] = useState(false)
   // Track hovered event from minimap for cross-highlighting
@@ -417,6 +418,27 @@ export function ActiveSession({ session, onClose }: ActiveSessionProps) {
       onClose,
       responseEditor,
     ],
+  )
+
+  // Cycle sidebar (minimap → todos → hide) with "t"
+  const handleCycleSidebar = useCallback(() => {
+    setSidebarMode(prev => {
+      if (prev === 'minimap') return 'todos'
+      if (prev === 'todos') return 'hidden'
+      return 'minimap'
+    })
+  }, [])
+
+  useHotkeys(
+    't',
+    () => {
+      handleCycleSidebar()
+    },
+    {
+      preventDefault: true,
+      scopes: [detailScope],
+    },
+    [handleCycleSidebar, detailScope],
   )
 
   // Toggle auto-accept handler
@@ -1033,18 +1055,32 @@ export function ActiveSession({ session, onClose }: ActiveSessionProps) {
             )}
           </Tabs>
 
-          <Card className="hidden lg:flex lg:w-1/5 flex-col min-h-0">
-            <CardContent className="flex flex-col flex-1 min-h-0 overflow-hidden p-2">
-              <SidebarWidget
-                events={events}
-                lastTodoEvent={lastTodo}
-                focusedEventId={navigation.focusedEventId}
-                hoveredEventId={minimapHoveredEventId}
-                onEventClick={handleMinimapEventClick}
-                onEventHover={handleMinimapEventHover}
-              />
-            </CardContent>
-          </Card>
+          {/* Sidebar - fixed width, hidden entirely when sidebarMode is 'hidden' */}
+          {sidebarMode !== 'hidden' && (
+            <div className="hidden lg:flex w-80 flex-shrink-0 flex-col min-h-0 mt-2">
+              {/* Hint above the pane */}
+              <div className="flex items-center justify-end text-[11px] text-muted-foreground gap-1 pb-1">
+                <kbd className="rounded border bg-muted px-1 py-[2px] font-mono text-[10px] leading-none">
+                  t
+                </kbd>
+                <span>cycle/hide</span>
+              </div>
+              <Card className="flex flex-col flex-1 min-h-0 overflow-hidden">
+                <CardContent className="flex flex-col flex-1 min-h-0 overflow-hidden px-2 py-1">
+                  <SidebarWidget
+                    events={events}
+                    lastTodoEvent={lastTodo}
+                    focusedEventId={navigation.focusedEventId}
+                    hoveredEventId={minimapHoveredEventId}
+                    onEventClick={handleMinimapEventClick}
+                    onEventHover={handleMinimapEventHover}
+                    activeTab={sidebarMode}
+                    onTabChange={tab => setSidebarMode(tab)}
+                  />
+                </CardContent>
+              </Card>
+            </div>
+          )}
         </div>
 
         {/* Active session input */}
