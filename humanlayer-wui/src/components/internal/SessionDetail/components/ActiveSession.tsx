@@ -18,7 +18,7 @@ import { TOAST_IDS } from '@/constants/toastIds'
 // Import extracted components
 import { ConversationStream } from '../../ConversationStream/ConversationStream'
 import { ToolResultModal } from './ToolResultModal'
-import { TodoWidget } from './TodoWidget'
+import { SidebarWidget } from './SidebarWidget'
 import { ActiveSessionInput } from './ActiveSessionInput'
 import { SessionModeIndicator } from '../AutoAcceptIndicator'
 import { ForkViewModal } from './ForkViewModal'
@@ -246,6 +246,20 @@ export function ActiveSession({ session, onClose }: ActiveSessionProps) {
     setForkPreviewData(null)
     responseEditor?.commands.setContent('')
   }, [responseEditor])
+
+  // Minimap event click handler - scroll to event in conversation
+  const handleMinimapEventClick = useCallback((eventId: number) => {
+    // Focus the event
+    navigation.setFocusedEventId(eventId)
+    navigation.setFocusSource('keyboard') // Trigger scroll behavior
+
+    // Scroll to the event in the conversation
+    const container = document.querySelector('[data-conversation-container]')
+    const element = container?.querySelector(`[data-event-id="${eventId}"]`)
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    }
+  }, [navigation])
 
   // Reset scroll flag when session changes
   useEffect(() => {
@@ -1011,13 +1025,16 @@ export function ActiveSession({ session, onClose }: ActiveSessionProps) {
             )}
           </Tabs>
 
-          {lastTodo && (
-            <Card className="hidden lg:flex lg:w-1/5 flex-col min-h-0">
-              <CardContent className="flex flex-col flex-1 min-h-0 overflow-hidden">
-                <TodoWidget event={lastTodo} />
-              </CardContent>
-            </Card>
-          )}
+          <Card className="hidden lg:flex lg:w-1/5 flex-col min-h-0">
+            <CardContent className="flex flex-col flex-1 min-h-0 overflow-hidden p-2">
+              <SidebarWidget
+                events={events}
+                lastTodoEvent={lastTodo}
+                focusedEventId={navigation.focusedEventId}
+                onEventClick={handleMinimapEventClick}
+              />
+            </CardContent>
+          </Card>
         </div>
 
         {/* Active session input */}
