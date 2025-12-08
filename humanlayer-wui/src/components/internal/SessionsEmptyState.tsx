@@ -28,18 +28,19 @@ export function SessionsEmptyState() {
       <div className="flex flex-col items-start w-full max-w-2xl">
         <div className="flex items-center gap-3 mb-2">
           <Terminal className="h-8 w-8 text-[var(--terminal-accent)]" />
-          <h1 className="text-2xl font-semibold">Welcome to CodeLayer</h1>
+          <h1 className="text-2xl font-semibold">Welcome to StarLayer</h1>
         </div>
 
         <p className="text-sm text-muted-foreground mb-8">
-          A powerful tool for working with AI agents in your development workflow.
+          A fork of CodeLayer by HumanLayer — a powerful tool for working with AI agents in your
+          development workflow.
         </p>
 
         <div className="space-y-6 mb-8 w-full">
           <div>
             <h3 className="flex items-center gap-2 text-sm font-medium text-[var(--terminal-accent)] mb-3">
               <Zap className="h-4 w-4" />
-              What CodeLayer does:
+              What StarLayer does:
             </h3>
             <ul className="text-sm text-muted-foreground space-y-2 ml-6">
               <li>• Research codebases and gather context</li>
@@ -74,8 +75,8 @@ export function SessionsEmptyState() {
 
           <div className="bg-muted/50 p-4 rounded-lg">
             <p className="text-sm text-muted-foreground">
-              CodeLayer uses your default Claude Code settings and API keys, and supports any agents or
-              slash commands you have configured.
+              StarLayer uses your default Claude Code settings and API keys, and supports any agents
+              or slash commands you have configured.
             </p>
           </div>
         </div>

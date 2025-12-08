@@ -59,10 +59,11 @@ export function AboutDialog({ open, onOpenChange }: AboutDialogProps) {
           <DialogHeader>
             <div className="flex items-center gap-3">
               <Terminal className="h-6 w-6 text-[var(--terminal-accent)]" />
-              <DialogTitle>Welcome to CodeLayer</DialogTitle>
+              <DialogTitle>Welcome to StarLayer</DialogTitle>
             </div>
             <DialogDescription className="text-left">
-              A powerful tool for working with AI agents in your development workflow.
+              A fork of CodeLayer by HumanLayer — a powerful tool for working with AI agents in your
+              development workflow.
             </DialogDescription>
           </DialogHeader>
 
@@ -70,7 +71,7 @@ export function AboutDialog({ open, onOpenChange }: AboutDialogProps) {
             <div>
               <h4 className="flex items-center gap-2 text-sm font-medium text-[var(--terminal-accent)] mb-2">
                 <Zap className="h-4 w-4" />
-                What CodeLayer does:
+                What StarLayer does:
               </h4>
               <ul className="text-sm text-muted-foreground space-y-1 ml-6">
                 <li>• Research codebases and gather context</li>
@@ -118,7 +119,10 @@ export function AboutDialog({ open, onOpenChange }: AboutDialogProps) {
 
           <div className="bg-muted/50 p-3 rounded-lg">
             <p className="text-xs text-muted-foreground text-center font-mono">
-              CodeLayer {displayVersion}
+              StarLayer {displayVersion}
+            </p>
+            <p className="text-xs text-muted-foreground text-center mt-1">
+              A fork of CodeLayer by HumanLayer
             </p>
           </div>
         </DialogContent>
