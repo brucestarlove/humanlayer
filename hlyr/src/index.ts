@@ -124,7 +124,7 @@ if (shouldLaunchApp(invocationName, hasArgs)) {
     launchApp(appPath)
     process.exit(0)
   } else {
-    const appName = invocationName === 'codelayer-nightly' ? 'CodeLayer-Nightly' : 'CodeLayer'
+    const appName = invocationName === 'codelayer-nightly' ? 'StarLayer-Nightly' : 'StarLayer'
     console.error(`${appName} app not found. Please install it first:`)
     console.error(
       `    brew install --cask humanlayer/humanlayer/${invocationName === 'codelayer-nightly' ? 'codelayer-nightly' : 'codelayer'}`,

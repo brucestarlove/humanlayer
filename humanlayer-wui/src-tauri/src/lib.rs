@@ -454,7 +454,7 @@ fn build_app_menu(app: &tauri::AppHandle) -> Result<Menu<tauri::Wry>, tauri::Err
         // App menu (macOS only) with standard items
         let app_menu = Submenu::with_items(
             app,
-            "CodeLayer",
+            "StarLayer",
             true,
             &[
                 // About item will be in the Help menu instead
@@ -509,7 +509,7 @@ fn build_app_menu(app: &tauri::AppHandle) -> Result<Menu<tauri::Wry>, tauri::Err
         )?;
 
         // Help menu with custom About item
-        let about_item = MenuItemBuilder::with_id("about", "About CodeLayer")
+        let about_item = MenuItemBuilder::with_id("about", "About StarLayer")
             .build(app)?;
 
         let help_menu = Submenu::with_items(
@@ -570,7 +570,7 @@ fn build_app_menu(app: &tauri::AppHandle) -> Result<Menu<tauri::Wry>, tauri::Err
         )?;
 
         // Help menu with custom About item
-        let about_item = MenuItemBuilder::with_id("about", "About CodeLayer")
+        let about_item = MenuItemBuilder::with_id("about", "About StarLayer")
             .build(app)?;
 
         let help_menu = Submenu::with_items(

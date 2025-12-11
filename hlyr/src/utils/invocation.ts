@@ -27,7 +27,7 @@ export function shouldLaunchApp(invocationName: string, hasArgs: boolean): boole
 
 export function getAppPath(invocationName: string): string | null {
   const isNightly = invocationName === 'codelayer-nightly'
-  const appName = isNightly ? 'CodeLayer-Nightly' : 'CodeLayer'
+  const appName = isNightly ? 'StarLayer-Nightly' : 'StarLayer'
   const appPath = `/Applications/${appName}.app`
 
   if (fs.existsSync(appPath)) {

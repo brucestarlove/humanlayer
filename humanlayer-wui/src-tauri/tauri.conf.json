@@ -1,6 +1,6 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "CodeLayer",
+  "productName": "StarLayer",
   "version": "0.1.0",
   "identifier": "dev.humanlayer.wui",
   "build": {
@@ -13,7 +13,7 @@
     "windows": [
       {
         "label": "main",
-        "title": "CodeLayer",
+        "title": "StarLayer",
         "width": 1440,
         "height": 900,
         "center": true,
