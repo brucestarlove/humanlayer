@@ -216,6 +216,47 @@ codelayer-nightly-bundle:
 	@echo "Nightly build complete! DMG available at:"
 	@ls -la humanlayer-wui/src-tauri/target/release/bundle/dmg/*.dmg
 
+# Build CodeLayer nightly bundle for Linux x64
+.PHONY: codelayer-nightly-bundle-linux
+codelayer-nightly-bundle-linux:
+	@echo "Setting build version..."
+	$(eval BUILD_VERSION := $(shell date +%Y%m%d)-nightly-local)
+	@echo "Building nightly daemon for Linux x64 (version: $(BUILD_VERSION))..."
+	cd hld && GOOS=linux GOARCH=amd64 go build -ldflags "\
+		-X github.com/humanlayer/humanlayer/hld/internal/version.BuildVersion=$(BUILD_VERSION) \
+		-X github.com/humanlayer/humanlayer/hld/config.DefaultDatabasePath=~/.humanlayer/daemon-nightly.db \
+		-X github.com/humanlayer/humanlayer/hld/config.DefaultSocketPath=~/.humanlayer/daemon-nightly.sock \
+		-X github.com/humanlayer/humanlayer/hld/config.DefaultHTTPPort=7778 \
+		-X github.com/humanlayer/humanlayer/hld/config.DefaultCLICommand=humanlayer-nightly" \
+		-o hld-linux-amd64 ./cmd/hld
+	@echo "Building humanlayer CLI for Linux x64..."
+	cd hlyr && bun install && bun run build
+	cd hlyr && bun build ./dist/index.js --compile --target=bun-linux-x64 --outfile=humanlayer-linux-x64
+	chmod +x hlyr/humanlayer-linux-x64
+	@echo "Copying binaries to Tauri resources..."
+	mkdir -p humanlayer-wui/src-tauri/bin
+	cp hld/hld-linux-amd64 humanlayer-wui/src-tauri/bin/hld
+	# Copy CLI as humanlayer-nightly (matches DefaultCLICommand for nightly builds)
+	cp hlyr/humanlayer-linux-x64 humanlayer-wui/src-tauri/bin/humanlayer-nightly
+	chmod +x humanlayer-wui/src-tauri/bin/hld
+	chmod +x humanlayer-wui/src-tauri/bin/humanlayer-nightly
+	@echo "Installing WUI dependencies..."
+	cd humanlayer-wui && bun install
+	@echo "Backing up original icons and using nightly icons..."
+	cd humanlayer-wui/src-tauri && rm -rf icons-original icons-backup
+	cd humanlayer-wui/src-tauri && cp -r icons icons-original && rm -rf icons && cp -r icons-nightly icons
+	@echo "Building Tauri app for Linux..."
+	cd humanlayer-wui && ( \
+		NO_STRIP=1 bun run tauri build --config src-tauri/tauri.nightly.conf.json; \
+		EXIT_CODE=$$?; \
+		echo "Restoring original icons..."; \
+		cd src-tauri && rm -rf icons && cp -r icons-original icons && rm -rf icons-original; \
+		exit $$EXIT_CODE \
+	)
+	@echo "Nightly Linux build complete! Bundles available at:"
+	@ls -la humanlayer-wui/src-tauri/target/release/bundle/deb/*.deb 2>/dev/null || true
+	@ls -la humanlayer-wui/src-tauri/target/release/bundle/appimage/*.AppImage 2>/dev/null || true
+
 # Open nightly WUI
 .PHONY: wui-nightly
 wui-nightly: wui-nightly-build

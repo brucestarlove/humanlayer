@@ -4,6 +4,7 @@
   "bundle": {
     "macOS": {
       "minimumSystemVersion": "12.0"
-    }
+    },
+    "resources": ["bin/hld", "bin/humanlayer-nightly"]
   }
 }

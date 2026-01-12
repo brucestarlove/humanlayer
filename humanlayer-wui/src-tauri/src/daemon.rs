@@ -153,11 +153,28 @@ impl DaemonManager {
             humanlayer_dir.join("daemon.sock")
         };
 
-        // Get daemon binary path (macOS only)
+        // Get daemon binary path
         let daemon_path = get_daemon_path(app_handle, is_dev)?;
 
         // Build environment with port 0 for dynamic allocation
         let mut env_vars = env::vars().collect::<Vec<_>>();
+
+        // For production builds, prepend the bundled bin directory to PATH
+        // so the daemon can find humanlayer-nightly (the MCP server CLI)
+        if !is_dev {
+            if let Ok(resource_dir) = app_handle.path().resource_dir() {
+                let bin_dir = resource_dir.join("bin");
+                if let Some(bin_dir_str) = bin_dir.to_str() {
+                    // Get current PATH and prepend our bin directory
+                    let current_path = env::var("PATH").unwrap_or_default();
+                    let new_path = format!("{}:{}", bin_dir_str, current_path);
+                    // Remove existing PATH from env_vars and add the new one
+                    env_vars.retain(|(k, _)| k != "PATH");
+                    env_vars.push(("PATH".to_string(), new_path.clone()));
+                    log::info!("[Tauri] Prepended bundled bin dir to PATH: {bin_dir_str}");
+                }
+            }
+        }
         env_vars.push((
             "HUMANLAYER_DATABASE_PATH".to_string(),
             database_path.to_str().unwrap().to_string(),

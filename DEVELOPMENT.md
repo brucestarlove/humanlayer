@@ -202,3 +202,27 @@ Check individual `package.json` files for specific commands, as package managers
 
 ### Go Development
 Check `go.mod` for Go version requirements and look for `Makefile` in each Go project directory.
+
+### Building Release Bundles
+
+#### macOS (arm64)
+```bash
+make codelayer-nightly-bundle
+```
+Produces a `.dmg` installer at `humanlayer-wui/src-tauri/target/release/bundle/dmg/`.
+
+#### Linux (x64)
+```bash
+make codelayer-nightly-bundle-linux
+```
+Produces `.deb` and `.AppImage` bundles at `humanlayer-wui/src-tauri/target/release/bundle/`.
+
+**Note:** AppImage building requires `libfuse2`:
+```bash
+sudo apt install libfuse2
+```
+
+Install the `.deb` with:
+```bash
+sudo dpkg -i humanlayer-wui/src-tauri/target/release/bundle/deb/StarLayer-Nightly_*.deb
+```
